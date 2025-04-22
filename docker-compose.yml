@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  gtwm-archive:
+    build: .
+    container_name: gtwm-archive
+    ports:
+      - "8080:80"  # Using 8080 to avoid potential conflicts
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York  # Change this to your timezone
+    labels:
+      - "com.unraid.container.icon=https://cdn-icons-png.flaticon.com/512/1384/1384061.png"
+      - "com.unraid.container.name=GTWM Podcast Archive"
+      - "com.unraid.container.description=Static site archive for GTWM podcast episodes"
+      # Unraid specific labels for better UI integration
+      - "com.unraid.container.category=MediaApp:Other"
+      - "com.unraid.container.webui=http://[IP]:[PORT:8080]/"
+    volumes:
+      - ${APPDATA}/gtwm-archive/data:/usr/share/nginx/html/data  # For persistent data storage

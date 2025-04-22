@@ -1,0 +1,16 @@
+{
+  "episodes": [
+    {
+      "title": "Episode 1",
+      "author": "Author Name",
+      "summary": "This is a summary of episode 1.",
+      "publicationDate": "2023-01-01"
+    },
+    {
+      "title": "Episode 2",
+      "author": "Author Name",
+      "summary": "This is a summary of episode 2.",
+      "publicationDate": "2023-02-01"
+    }
+  ]
+}

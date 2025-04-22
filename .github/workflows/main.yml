@@ -1,0 +1,66 @@
+name: CI/CD and Episode Updates
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */12 * * *'  # Run twice daily
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        python -m pip install -r src/scripts/python/requirements.txt
+
+    - name: Update Episodes
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      run: npm run update
+
+    - name: Build TypeScript
+      run: npm run build
+
+    - name: Build Docker image
+      run: docker build -t gtwm-viewer .
+
+    - name: Login to GitHub Container Registry
+      if: github.ref == 'refs/heads/main'
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push Docker image
+      if: github.ref == 'refs/heads/main'
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/gtwm-viewer
+        docker tag gtwm-viewer $IMAGE_ID:latest
+        docker push $IMAGE_ID:latest
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
+        cname: ${{ secrets.CUSTOM_DOMAIN }}  # Optional: if you have a custom domain

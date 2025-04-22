@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+    <main>
+        <article>
+            <h2>{{ title }}</h2>
+            <p><strong>Published on:</strong> {{ publicationDate }}</p>
+            <p>{{ description }}</p>
+            <audio controls>
+                <source src="{{ audioUrl }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </article>
+    </main>
+    <footer>
+        <p>&copy; {{ year }} Podcast Site</p>
+    </footer>
+</body>
+</html>

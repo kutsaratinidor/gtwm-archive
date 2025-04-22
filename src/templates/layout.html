@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTWM Podcast Archive</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles/main.css">
+    <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1>GTWM Podcast Archive</h1>
+            <p class="site-description">A comprehensive archive of Good Times with Mo podcast episodes</p>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                🌓
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Content will be injected here including statistics and episodes -->
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© GTWM Podcast Archive</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
