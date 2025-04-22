@@ -4,8 +4,8 @@
   "description": "GTWM Podcast Archive Static Site",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && npm run copy-assets && node dist/scripts/generate.js",
-    "copy-assets": "cp -r src/styles public/ && cp -r src/data dist/ && cp -r src/templates dist/ && cp -r src/scripts/python dist/scripts/",
+    "build": "mkdir -p public && mkdir -p public/styles && tsc && npm run copy-assets && node dist/scripts/generate.js",
+    "copy-assets": "cp -r src/styles/* public/styles/ && cp -r src/data dist/ && cp -r src/templates dist/ && cp -r src/scripts/python dist/scripts/",
     "dev": "npm run build && http-server public",
     "update": "tsc && node dist/scripts/update-episodes.js"
   },

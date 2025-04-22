@@ -9,12 +9,17 @@ on:
     - cron: '0 */12 * * *'  # Run twice daily
   workflow_dispatch:  # Allow manual trigger
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
     - uses: actions/checkout@v4
@@ -44,6 +49,18 @@ jobs:
         npm run build
         ls -la public/
 
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './public'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
     - name: Build Docker image
       run: docker build -t gtwm-viewer .
 
@@ -61,11 +78,3 @@ jobs:
         IMAGE_ID=ghcr.io/${{ github.repository_owner }}/gtwm-viewer
         docker tag gtwm-viewer $IMAGE_ID:latest
         docker push $IMAGE_ID:latest
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
-        cname: ${{ secrets.CUSTOM_DOMAIN }}  # Optional: if you have a custom domain
