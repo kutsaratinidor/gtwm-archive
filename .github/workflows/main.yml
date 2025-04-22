@@ -12,6 +12,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
     - uses: actions/checkout@v4
@@ -36,8 +39,10 @@ jobs:
       if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
       run: npm run update
 
-    - name: Build TypeScript
-      run: npm run build
+    - name: Build site
+      run: |
+        npm run build
+        ls -la public/
 
     - name: Build Docker image
       run: docker build -t gtwm-viewer .
