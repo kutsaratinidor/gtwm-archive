@@ -48,6 +48,44 @@ def parse_published_date(raw_date: str) -> datetime | None:
             continue
     print(f"⚠️ Could not parse date: {raw_date}")
     return None
+
+def extract_callers(summary: str) -> tuple[list[str], str]:
+    """Extract caller information from summary and return callers list and cleaned summary.
+    Each caller entry includes their full description until the next caller or end of text."""
+    # Split by 'Caller #' but keep the delimiter
+    parts = re.split(r'(Caller #\d+)', summary)
+    
+    callers = []
+    cleaned_parts = []
+    
+    if parts[0] and not parts[0].startswith('Caller #'):
+        cleaned_parts.append(parts[0])
+    
+    # Process each part after splitting
+    i = 1
+    while i < len(parts) - 1:
+        caller_num = parts[i]  # This is 'Caller #X'
+        description = parts[i + 1]  # This is the text until the next caller
+        
+        # Combine caller number with their description
+        full_caller = (caller_num + description).strip()
+        callers.append(full_caller)
+        i += 2
+    
+    # The last part might be a caller description
+    if i < len(parts):
+        last_part = parts[i]
+        if last_part.startswith('Caller #'):
+            callers.append(last_part.strip())
+        else:
+            cleaned_parts.append(last_part)
+    
+    # Join the non-caller parts for the cleaned summary
+    cleaned_summary = ' '.join(cleaned_parts).strip()
+    cleaned_summary = ' '.join(cleaned_summary.split())  # Clean up whitespace
+    
+    return callers, cleaned_summary
+
 def save_episodes_to_json(episodes: List[str], year: int, filename: str = None) -> None:
     """Save episodes to a JSON file with structured data."""
     if filename is None:
@@ -60,8 +98,11 @@ def save_episodes_to_json(episodes: List[str], year: int, filename: str = None) 
         # Rejoin summary parts in case summary contained newlines
         summary = '\n'.join(summary_parts)
         
+        # Extract callers and clean summary
+        callers, cleaned_summary = extract_callers(summary)
+        
         # Clean up the summary by replacing \n with <br> for better HTML display
-        summary = summary.replace('\n', '<br>')
+        cleaned_summary = cleaned_summary.replace('\n', '<br>')
         
         try:
             parsed_date = parse_published_date(date.strip())
@@ -74,7 +115,8 @@ def save_episodes_to_json(episodes: List[str], year: int, filename: str = None) 
             "episode title": title.strip(),
             "date": formatted_date.strip(),
             "duration": duration.strip(),
-            "summary": summary.strip()
+            "callers": callers,
+            "summary": cleaned_summary.strip()
         }
         structured_episodes.append(episode_data)
     
