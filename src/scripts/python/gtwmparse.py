@@ -17,10 +17,27 @@ def setup_ssl_context() -> None:
 
 def clean_summary(text: str) -> str:
     """Clean HTML and special characters from summary text."""
-    html_clean = re.compile('(<.*?>)|(&nbsp;)|(Powered by (\S|\W)*)|(--- (\S|\W)*)|(BingoPlus!(\S|\W)*)|(GTWM has a new sponsor!(\S|\W)*)|(We will see you on another episode of GTWM tomorrow(\S|\W)*)')
-    quote_clean = re.compile('(&quot;)')
     
-    text = re.sub(html_clean, '', text)
+    # List of phrases or patterns to remove
+    removal_phrases = [
+        r'(<.*?>)',                    # Remove HTML tags
+        r'(&nbsp;)',                   # Remove &nbsp;
+        r'(Powered by.*)',             # Remove "Powered by ..." and anything after
+        r'(--- .*)',                   # Remove "--- ..." lines
+        r'(BingoPlus!.*)',              # Remove BingoPlus! lines
+        r'(GTWM has a new sponsor!.*)', # Remove GTWM sponsor lines
+        r'(We will see you on another episode of GTWM tomorrow.*)', # Remove outro
+        r'(\?*\s*Who doesn’t want to have fun and enjoy exciting games.*)' # Your new rule
+    ]
+    
+    # Build the compiled regex pattern
+    pattern = re.compile('|'.join(removal_phrases), re.DOTALL)
+    
+    # Remove unwanted content using the pattern
+    text = re.sub(pattern, '', text)
+    
+    # Clean quote marks (&quot;) to normal quotes
+    quote_clean = re.compile('(&quot;)')
     return re.sub(quote_clean, '"', text)
 
 def get_episodes_by_year(feed: dict, year: int) -> List[str]:
