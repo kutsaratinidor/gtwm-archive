@@ -55,19 +55,6 @@ gtwm-archive
 - npm or yarn
 - Git
 
-## Usage
-
-### Automated Updates
-- Episodes are automatically updated daily via GitHub Actions
-- Updates run at 12-hour intervals
-- New episodes are sorted by year and added to corresponding JSON files
-
-### Manual Updates
-To manually update episodes:
-```bash
-npm run update
-```
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
