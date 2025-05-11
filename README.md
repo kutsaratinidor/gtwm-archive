@@ -55,55 +55,6 @@ gtwm-archive
 - npm or yarn
 - Git
 
-## Setup Instructions
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/gtwm-archive.git
-   cd gtwm-archive
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   pip install -r src/scripts/python/requirements.txt
-   ```
-
-3. Generate the static site:
-   ```bash
-   npm run build
-   ```
-
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-The site will be available at `http://localhost:8080`
-
-## CI/CD Setup
-
-This project uses GitHub Actions for continuous integration and deployment:
-
-1. Push this repository to GitHub
-2. Configure GitHub Pages:
-   - Go to repository Settings > Pages
-   - Set the Source to "GitHub Actions"
-   - Your site will be available at `https://[username].github.io/gtwm-archive`
-
-### Alternative Deployment Options
-
-#### Custom Domain
-1. Add your domain in repository Settings > Pages
-2. Create a `CNAME` record pointing to `[username].github.io`
-3. Add `CUSTOM_DOMAIN` secret in repository settings with your domain
-
-### Development Mode
-For local development with hot-reloading:
-```bash
-npm run dev
-```
-
 ## Usage
 
 ### Automated Updates
@@ -116,14 +67,6 @@ To manually update episodes:
 ```bash
 npm run update
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License
 
