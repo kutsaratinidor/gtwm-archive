@@ -6,14 +6,14 @@ A comprehensive archive of Good Times with Mo (GTWM) podcast episodes. This proj
 
 ## Features
 
-- 🎧 Comprehensive episode archive from 2019 to present
-- 📱 Responsive design with dark mode support
-- 📊 Episode statistics and analytics
-- 🔍 Year-based navigation and filtering
-- 🤖 Automated daily episode updates
-- 🌙 Dark mode support
-- 📈 Episode statistics and duration tracking
-- 🔄 Continuous deployment via GitHub Actions
+- Comprehensive episode archive from 2019 to present
+- Responsive design with dark mode support
+- Episode statistics and analytics
+- Year-based navigation and filtering
+- Automated daily episode updates
+- Dark mode support
+- Episode statistics and duration tracking
+- Continuous deployment via GitHub Actions
 
 ## Technology Stack
 
@@ -21,7 +21,6 @@ A comprehensive archive of Good Times with Mo (GTWM) podcast episodes. This proj
 - **Build Tools**: Node.js, npm
 - **Data Processing**: Python (for episode parsing)
 - **Deployment**: GitHub Pages
-- **Containerization**: Docker (optional)
 - **CI/CD**: GitHub Actions
 
 ## Project Structure
@@ -45,8 +44,6 @@ gtwm-archive
 ├── content/           # Content storage
 │   └── episodes/      # Episode metadata
 ├── public/           # Generated static site
-├── docker-compose.yml # Docker configuration
-├── Dockerfile        # Container definition
 ├── package.json      # Node.js dependencies
 └── tsconfig.json    # TypeScript configuration
 ```
@@ -101,16 +98,10 @@ This project uses GitHub Actions for continuous integration and deployment:
 2. Create a `CNAME` record pointing to `[username].github.io`
 3. Add `CUSTOM_DOMAIN` secret in repository settings with your domain
 
-#### Custom Server Deployment
-1. Add these secrets to your repository:
-   - `DEPLOY_KEY`: SSH private key
-   - `DEPLOY_HOST`: Server hostname
-   - `DEPLOY_USER`: SSH username
-2. Modify `.github/workflows/main.yml` as needed
-
-#### Docker Deployment
+### Development Mode
+For local development with hot-reloading:
 ```bash
-docker-compose up -d
+npm run dev
 ```
 
 ## Usage
@@ -124,12 +115,6 @@ docker-compose up -d
 To manually update episodes:
 ```bash
 npm run update
-```
-
-### Development Mode
-For local development with hot-reloading:
-```bash
-npm run dev
 ```
 
 ## Contributing
