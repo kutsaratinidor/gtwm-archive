@@ -23,6 +23,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -40,9 +43,27 @@ jobs:
         npm ci
         python -m pip install -r src/scripts/python/requirements.txt
 
+    - name: Configure Git
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
     - name: Update Episodes
       if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
       run: npm run update
+
+    - name: Commit episode updates
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      run: |
+        if [[ -n $(git status --porcelain src/data/) ]]; then
+          echo "Found changes in episode data, committing..."
+          git add src/data/
+          git commit -m "chore: update episode data [skip ci]"
+          git push origin main
+        else
+          echo "No changes in episode data"
+        fi
 
     - name: Build site
       run: |
